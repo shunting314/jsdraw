@@ -5,7 +5,7 @@
 <body>
 <!-- TODO center the canvas does not work yet -->
 <!-- <canvas id="myCanvas" width="1000" height="750" style="background-color: grey; margin-left=auto; margin-right=auto; display=block;"/> -->
-<canvas id="myCanvas" width="1000" height="750" style="background-color: grey;" />
+<canvas id="myCanvas" width="1000" height="500" style="background-color: grey;" />
 <script>
 // util functions
 function rand_int(start, end) {
@@ -30,6 +30,17 @@ function http_get_params() {
   return params
 }
 
+function draw_pixel(ctx, x, y) {
+  ctx.beginPath()
+  ctx.moveTo(x, y)
+  ctx.lineTo(x + 1, y + 1);
+  ctx.stroke();
+}
+
+function reset_canvas(canvas, ctx) {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
 </script>
 <script>
 function draw_rect_demo(ctx) {
@@ -38,7 +49,7 @@ function draw_rect_demo(ctx) {
 }
 
 function draw_circle_demo(canvas, ctx) {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  reset_canvas(canvas, ctx);
   num_circle = rand_int(5, 11);
   color_list = ["#ff0000", "#00ff00", "#0000ff"];
   for (var circ_id = 0; circ_id < num_circle; ++circ_id) {
@@ -54,9 +65,22 @@ function draw_circle_demo(canvas, ctx) {
   setTimeout(function() { draw_circle_demo(canvas, ctx);}, 1000);
 }
 
-// TODO
-function draw_sin() {
-  console.log("draw sin");
+// y = yscale * sin(x / xscale)
+function draw_sin(canvas, ctx, shift=0) {
+  reset_canvas(canvas, ctx);
+  orig_x = 10
+  orig_y = canvas.height / 2
+  xscale = 20
+  yscale = -20
+
+  for (var x = 0; x < canvas.width - 10; ++x) {
+    var y = yscale * Math.sin((x + shift) / xscale);
+    ctx.strokeStyle = "#ff0000"
+    draw_pixel(ctx, x + orig_x, y + orig_y)
+    ctx.strokeStyle = "#00ff00"
+    draw_pixel(ctx, x + orig_x, -y + orig_y)
+  }
+  setTimeout(function() { draw_sin(canvas, ctx, shift + 1); }, 10);
 }
 
 var canvas = document.getElementById("myCanvas");
@@ -74,7 +98,7 @@ if (cmd == "circle") {
 } else if (cmd == "rect_demo") {
   draw_rect_demo(ctx);
 } else {
-  draw_sin()
+  draw_sin(canvas, ctx)
 }
 
 </script>
