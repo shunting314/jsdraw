@@ -41,6 +41,14 @@ function reset_canvas(canvas, ctx) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
+function rotate_vec(x, y, ang) {
+  x2 = Math.cos(ang);
+  y2 = Math.sin(ang);
+  xe = x * x2 - y * y2
+  ye = x * y2 + y * x2;
+  return [xe, ye]
+}
+
 </script>
 <script>
 function draw_rect_demo(ctx) {
@@ -66,9 +74,9 @@ function draw_circle_demo(canvas, ctx) {
 }
 
 // y = yscale * sin(x / xscale)
-function draw_sin(canvas, ctx, shift=0) {
+function draw_sin(canvas, ctx, shift=0, ang=0) {
   reset_canvas(canvas, ctx);
-  orig_x = 10
+  orig_x = canvas.width / 2
   orig_y = canvas.height / 2
   xscale = 20
   yscale = -20
@@ -76,11 +84,13 @@ function draw_sin(canvas, ctx, shift=0) {
   for (var x = 0; x < canvas.width - 10; ++x) {
     var y = yscale * Math.sin((x + shift) / xscale);
     ctx.strokeStyle = "#ff0000"
-    draw_pixel(ctx, x + orig_x, y + orig_y)
+    rot1 = rotate_vec(x, y, ang);
+    rot2 = rotate_vec(x, -y, ang);
+    draw_pixel(ctx, rot1[0] + orig_x, rot1[1] + orig_y)
     ctx.strokeStyle = "#00ff00"
-    draw_pixel(ctx, x + orig_x, -y + orig_y)
+    draw_pixel(ctx, rot2[0] + orig_x, rot2[1] + orig_y)
   }
-  setTimeout(function() { draw_sin(canvas, ctx, shift + 1); }, 10);
+  setTimeout(function() { draw_sin(canvas, ctx, shift + 1, ang + 3.14 / 1000); }, 10);
 }
 
 var canvas = document.getElementById("myCanvas");
