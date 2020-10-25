@@ -5,7 +5,7 @@
 <body>
 <!-- TODO center the canvas does not work yet -->
 <!-- <canvas id="myCanvas" width="1000" height="750" style="background-color: grey; margin-left=auto; margin-right=auto; display=block;"/> -->
-<canvas id="myCanvas" width="1000" height="500" style="background-color: grey;" />
+<canvas id="myCanvas" width="1000" height="500" style="background-color: #eee;" />
 <script type="text/javascript" src="util.js"></script>
 <script type="text/javascript" src="pytha.js"></script>
 <script>
@@ -29,6 +29,27 @@ function draw_circle_demo(canvas, ctx) {
     ctx.fill()
   }
   setTimeout(function() { draw_circle_demo(canvas, ctx);}, 1000);
+}
+
+function parse_color(color_str) {
+  return [parseInt(color_str.substr(1, 2), 16),
+    parseInt(color_str.substr(3, 2), 16),
+    parseInt(color_str.substr(5, 2), 16)]
+}
+
+function color_add(lhs, rhs) {
+  if (lhs.length != 7 || rhs.length != 7) {
+    console.log(`Invalid input for color_add ${lhs}, ${rhs}`)
+    return lhs;
+  }
+  var lhs_ar = parse_color(lhs)
+  var rhs_ar = parse_color(rhs)
+  var r = Math.min(255, lhs_ar[0] + rhs_ar[0])
+  var g = Math.min(255, lhs_ar[1] + rhs_ar[1])
+  var b = Math.min(255, lhs_ar[2] + rhs_ar[2])
+  return "#" + r.toString(16).padStart(2, '0')
+      + g.toString(16).padStart(2, '0')
+      + b.toString(16).padStart(2, '0')
 }
 
 // y = yscale * sin(x / xscale)

@@ -1,4 +1,5 @@
-// TODO better colors
+// TODO save as png
+//
 // TODO have a control to tune angle and draw adaptively!!
 
 class pytha_ctx {
@@ -90,28 +91,24 @@ class cube {
   }
 }
 
-function draw_patha_tree_rec(cub_bot_ray, ttl, tag="untagged") {
+function draw_patha_tree_rec(cub_bot_ray, ttl, tag="untagged", color="#006000") {
   if (ttl <= 0) {
     return;
   }
   var ctx = g_ctx.ctx
   var cub = new cube(cub_bot_ray);
-  ctx.fillStyle = "#ff0000"
-  if (tag == "right") {
-    ctx.fillStyle = "#cccccc";
-  }
+
+  ctx.fillStyle = color
+
   cub.draw()
   var tri = new triangle(cub.tl, cub.tr, g_ctx.left_ang)
-  ctx.fillStyle = "#00ff00"
-  if (tag == "right") {
-    ctx.fillStyle = "#cc00cc";
-  }
+  ctx.fillStyle = "#eee"
   tri.draw()
 
   // left
-  draw_patha_tree_rec(new ray(tri.bl, tri.tp), ttl - 1, "left")
+  draw_patha_tree_rec(new ray(tri.bl, tri.tp), ttl - 1, "left", color_add(color, "#200000"))
   // right
-  draw_patha_tree_rec(new ray(tri.tp, tri.br), ttl - 1, "right")
+  draw_patha_tree_rec(new ray(tri.tp, tri.br), ttl - 1, "right", color_add(color, "#000020"))
 }
 
 function draw_pythagoras_tree(canvas, ctx) {
