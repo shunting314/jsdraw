@@ -1,13 +1,25 @@
+// TODO better colors
+// TODO have a control to tune angle and draw adaptively!!
+
+class pytha_ctx {
+  constructor(ctx, left_ang) {
+    this.ctx = ctx
+    this.left_ang = left_ang
+  }
+}
+
+g_ctx = null
+
 class Point {
   constructor(x, y) {
     this.x = x;
     this.y = y;
   }
-  moveTo(ctx) {
-    ctx.moveTo(this.x, this.y)
+  moveTo() {
+    g_ctx.ctx.moveTo(this.x, this.y)
   }
-  lineTo(ctx) {
-    ctx.lineTo(this.x, this.y)
+  lineTo() {
+    g_ctx.ctx.lineTo(this.x, this.y)
   }
   log() {
     console.log(`Point(${this.x}, ${this.y})`)
@@ -36,16 +48,17 @@ class ray {
 }
 
 class triangle {
-  constructor(bl, br) {
+  constructor(bl, br, left_ang = 3.14 / 4) {
     this.bl = bl
     this.br = br
-    this.tp = new ray(bl, br).rotate_reach(-3.14 / 4, Math.sqrt(2) / 2);
+    this.tp = new ray(bl, br).rotate_reach(-left_ang, Math.cos(left_ang));
   }
   draw() {
+    var ctx = g_ctx.ctx
     ctx.beginPath()
-    this.bl.moveTo(ctx)
-    this.br.lineTo(ctx)
-    this.tp.lineTo(ctx)
+    this.bl.moveTo()
+    this.br.lineTo()
+    this.tp.lineTo()
     ctx.closePath()
     ctx.fill()
   }
@@ -58,12 +71,13 @@ class cube {
     this.tl = ray.rotate_reach(-3.14 / 2, 1)
     this.tr = ray.rotate_reach(-3.14 / 4, Math.sqrt(2))
   }
-  draw(ctx) {
+  draw() {
+    var ctx = g_ctx.ctx
     ctx.beginPath()
-    this.bl.moveTo(ctx)
-    this.br.lineTo(ctx)
-    this.tr.lineTo(ctx)
-    this.tl.lineTo(ctx)
+    this.bl.moveTo()
+    this.br.lineTo()
+    this.tr.lineTo()
+    this.tl.lineTo()
     ctx.closePath()
     ctx.fill()
   }
@@ -76,33 +90,35 @@ class cube {
   }
 }
 
-function draw_patha_tree_rec(ctx, cub_bot_ray, ttl, tag="untagged") {
+function draw_patha_tree_rec(cub_bot_ray, ttl, tag="untagged") {
   if (ttl <= 0) {
     return;
   }
+  var ctx = g_ctx.ctx
   var cub = new cube(cub_bot_ray);
   ctx.fillStyle = "#ff0000"
   if (tag == "right") {
     ctx.fillStyle = "#cccccc";
   }
-  cub.draw(ctx)
-  var tri = new triangle(cub.tl, cub.tr)
+  cub.draw()
+  var tri = new triangle(cub.tl, cub.tr, g_ctx.left_ang)
   ctx.fillStyle = "#00ff00"
   if (tag == "right") {
     ctx.fillStyle = "#cc00cc";
   }
-  tri.draw(ctx)
+  tri.draw()
 
   // left
-  draw_patha_tree_rec(ctx, new ray(tri.bl, tri.tp), ttl - 1, "left")
+  draw_patha_tree_rec(new ray(tri.bl, tri.tp), ttl - 1, "left")
   // right
-  draw_patha_tree_rec(ctx, new ray(tri.tp, tri.br), ttl - 1, "right")
+  draw_patha_tree_rec(new ray(tri.tp, tri.br), ttl - 1, "right")
 }
 
 function draw_pythagoras_tree(canvas, ctx) {
   console.log("draw pytha tree");
+  g_ctx = new pytha_ctx(ctx, 3.14 / 3) 
   cub_bot_ray = new ray(
-    new Point(canvas.width / 2 - 50, canvas.height - 10),
-    new Point(canvas.width / 2 + 50, canvas.height - 10));
-  draw_patha_tree_rec(ctx, cub_bot_ray, 8);
+    new Point(canvas.width / 2 - 50, canvas.height - 50),
+    new Point(canvas.width / 2 + 50, canvas.height - 50));
+  draw_patha_tree_rec(cub_bot_ray, 15);
 }
