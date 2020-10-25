@@ -18,6 +18,18 @@ function rand_int(start, end) {
   width = end - start;
   return Math.floor((Math.random() * width) + start);
 }
+
+function http_get_params() {
+  params = {}
+  for (var assignstr of location.href.split('?')[1].split('&')) {
+    pair = assignstr.split('=')
+    key = decodeURIComponent(pair[0])
+    val = decodeURIComponent(pair[1])
+    params[key] = val;
+  }
+  return params
+}
+
 </script>
 <script>
 function draw_rect_demo(ctx) {
@@ -44,14 +56,26 @@ function draw_circle_demo(canvas, ctx) {
 
 // TODO
 function draw_sin() {
+  console.log("draw sin");
 }
+
 var canvas = document.getElementById("myCanvas");
 console.log(`canvas width ${canvas.width} height ${canvas.height}`);
 var ctx = canvas.getContext("2d");
-// TODO control by input argument
-// draw_rect_demo(ctx);
-draw_circle_demo(canvas, ctx);
-// draw_sin()
+
+cmd = http_get_params()['cmd']
+if (!cmd) {
+  cmd = "circle"; // default
+}
+console.log(`cmd is ${cmd}`);
+
+if (cmd == "circle") {
+  draw_circle_demo(canvas, ctx);
+} else if (cmd == "rect_demo") {
+  draw_rect_demo(ctx);
+} else {
+  draw_sin()
+}
 
 </script>
 </body>
