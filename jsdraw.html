@@ -1,0 +1,58 @@
+<html>
+<head>
+<title>JS Draw!</title>
+</head>
+<body>
+<!-- TODO center the canvas does not work yet -->
+<!-- <canvas id="myCanvas" width="1000" height="750" style="background-color: grey; margin-left=auto; margin-right=auto; display=block;"/> -->
+<canvas id="myCanvas" width="1000" height="750" style="background-color: grey;" />
+<script>
+// util functions
+function rand_int(start, end) {
+  start = Math.floor(start);
+  end = Math.floor(end);
+  if (start >= end) {
+    console.log(`Invalid input to rand_int: start ${start}, end ${end}`);
+    return start;
+  }
+  width = end - start;
+  return Math.floor((Math.random() * width) + start);
+}
+</script>
+<script>
+function draw_rect_demo(ctx) {
+  ctx.fillStyle = "#00ff00";
+  ctx.fillRect(0, 0, 20, 40);
+}
+
+function draw_circle_demo(canvas, ctx) {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  num_circle = rand_int(5, 11);
+  color_list = ["#ff0000", "#00ff00", "#0000ff"];
+  for (var circ_id = 0; circ_id < num_circle; ++circ_id) {
+    x = rand_int(0, canvas.width)
+    y = rand_int(0, canvas.height)
+    radius = rand_int(20, 50)
+    color = color_list[rand_int(0, color_list.length)];
+    ctx.fillStyle = color;
+    ctx.beginPath()
+    ctx.arc(x, y, radius, 0, 3.14 * 2);
+    ctx.fill()
+  }
+  setTimeout(function() { draw_circle_demo(canvas, ctx);}, 1000);
+}
+
+// TODO
+function draw_sin() {
+}
+var canvas = document.getElementById("myCanvas");
+console.log(`canvas width ${canvas.width} height ${canvas.height}`);
+var ctx = canvas.getContext("2d");
+// TODO control by input argument
+// draw_rect_demo(ctx);
+draw_circle_demo(canvas, ctx);
+// draw_sin()
+
+</script>
+</body>
+</html>
