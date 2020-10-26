@@ -1,7 +1,8 @@
 class pytha_ctx {
-  constructor(canvas, ctx, left_ang, animate) {
+  constructor(canvas, ctx, cub_bot_ray, left_ang, animate) {
     this.canvas = canvas;
     this.ctx = ctx
+    this.cub_bot_ray = cub_bot_ray
     this.left_ang = left_ang
     this.animate = animate
     this.inc = 1.0;
@@ -125,12 +126,12 @@ function draw_patha_tree_rec(cub_bot_ray, ttl, tag="untagged", color="#006000") 
   draw_patha_tree_rec(new ray(tri.tp, tri.br), ttl - 1, "right", color_add(color, "#000020"))
 }
 
-function draw_tree_instance(cub_bot_ray) {
+function draw_tree_instance() {
   reset_canvas(g_ctx.canvas, g_ctx.ctx) 
-  draw_patha_tree_rec(cub_bot_ray, 15);
+  draw_patha_tree_rec(g_ctx.cub_bot_ray, 15);
   if (g_ctx.animate) {
     g_ctx.turn()
-    setTimeout(function() { draw_tree_instance(cub_bot_ray); }, g_ctx.interval);
+    setTimeout(function() { draw_tree_instance(g_ctx.cub_bot_ray); }, g_ctx.interval);
   }
 }
 
@@ -139,19 +140,28 @@ function download_canvas(el, canvas) {
   el.href = image_uri
 }
 
+function canvas_click() {
+  if (g_ctx.animate) {
+    g_ctx.animate = false;
+  } else {
+    g_ctx.animate = true;
+    draw_tree_instance();
+  }
+}
+
 function draw_pythagoras_tree(canvas, ctx, animate) {
   console.log("draw pytha tree");
-  g_ctx = new pytha_ctx(canvas, ctx, 3.14 / 4, animate) 
   var lx = canvas.width / 2 - 50
   var cub_bot_ray = new ray(
     new Point(lx, canvas.height - 50),
     new Point(lx + 100, canvas.height - 50));
-  draw_tree_instance(cub_bot_ray)
+  g_ctx = new pytha_ctx(canvas, ctx, cub_bot_ray, 3.14 / 4, animate) 
+  draw_tree_instance()
+
+  canvas.onclick = canvas_click
 
   // setup download
-  if (!animate) {
-    var download_link = document.getElementById("download")
-    download_link.style.display = 'block'
-    download_link.onclick = function() { download_canvas(download_link, canvas); }
-  }
+  var download_link = document.getElementById("download")
+  download_link.style.display = 'block'
+  download_link.onclick = function() { download_canvas(download_link, canvas); }
 }
