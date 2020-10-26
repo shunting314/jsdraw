@@ -1,5 +1,3 @@
-// TODO save as png
-//
 // TODO have a control to tune angle and draw adaptively!!
 
 class pytha_ctx {
@@ -111,11 +109,20 @@ function draw_patha_tree_rec(cub_bot_ray, ttl, tag="untagged", color="#006000") 
   draw_patha_tree_rec(new ray(tri.tp, tri.br), ttl - 1, "right", color_add(color, "#000020"))
 }
 
+function download_canvas(el, canvas) {
+  var image_uri = canvas.toDataURL("image/jpg")
+  el.href = image_uri
+}
+
 function draw_pythagoras_tree(canvas, ctx) {
   console.log("draw pytha tree");
   g_ctx = new pytha_ctx(ctx, 3.14 / 3) 
+  lx = canvas.width / 2 - 155
   cub_bot_ray = new ray(
-    new Point(canvas.width / 2 - 50, canvas.height - 50),
-    new Point(canvas.width / 2 + 50, canvas.height - 50));
+    new Point(lx, canvas.height - 50),
+    new Point(lx + 100, canvas.height - 50));
   draw_patha_tree_rec(cub_bot_ray, 15);
+  download_link = document.getElementById("download")
+  download_link.style.display = 'block'
+  download_link.onclick = function() { download_canvas(download_link, canvas); }
 }
