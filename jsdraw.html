@@ -6,7 +6,7 @@
 <!-- TODO center the canvas does not work yet -->
 <!-- <canvas id="myCanvas" width="1000" height="750" style="background-color: grey; margin-left=auto; margin-right=auto; display=block;"/> -->
 <div>
-<canvas id="myCanvas" width="800" height="500" style="background-color: #eee;"></canvas>
+<canvas id="myCanvas" width="1200" height="500" style="background-color: #eee;"></canvas>
 </div>
 <a id="download" download="my_image.jpg" href="" style="display: none;">Download to my_image.jpg</a>
 <script type="text/javascript" src="util.js"></script>
@@ -79,7 +79,8 @@ var canvas = document.getElementById("myCanvas");
 console.log(`canvas width ${canvas.width} height ${canvas.height}`);
 var ctx = canvas.getContext("2d");
 
-cmd = http_get_params()['cmd']
+var cmd = http_get_params()['cmd']
+var animate = http_get_params()['animate']
 if (!cmd) {
   cmd = "circle"; // default
 }
@@ -90,7 +91,7 @@ if (cmd == "sin") {
 } else if (cmd == "rect_demo") {
   draw_rect_demo(ctx);
 } else if (cmd == "pytha") {
-  draw_pythagoras_tree(canvas, ctx);
+  draw_pythagoras_tree(canvas, ctx, !!animate);
 } else if (cmd == "circle") {
   draw_circle_demo(canvas, ctx);
 } else {
