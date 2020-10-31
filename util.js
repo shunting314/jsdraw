@@ -48,3 +48,28 @@ function rotate_vec(x, y, ang) {
   ye = x * y2 + y * x2;
   return [xe, ye]
 }
+
+function parse_color(color_str) {
+  return [parseInt(color_str.substr(1, 2), 16),
+    parseInt(color_str.substr(3, 2), 16),
+    parseInt(color_str.substr(5, 2), 16)]
+}
+
+function color_add(lhs, rhs) {
+  if (lhs.length != 7 || rhs.length != 7) {
+    console.log(`Invalid input for color_add ${lhs}, ${rhs}`)
+    return lhs;
+  }
+  var lhs_ar = parse_color(lhs)
+  var rhs_ar = parse_color(rhs)
+  var r = Math.min(255, lhs_ar[0] + rhs_ar[0])
+  var g = Math.min(255, lhs_ar[1] + rhs_ar[1])
+  var b = Math.min(255, lhs_ar[2] + rhs_ar[2])
+  return to_rgbstr(r, g, b)
+}
+
+function to_rgbstr(r, g, b) {
+  return "#" + r.toString(16).padStart(2, '0')
+      + g.toString(16).padStart(2, '0')
+      + b.toString(16).padStart(2, '0')
+}

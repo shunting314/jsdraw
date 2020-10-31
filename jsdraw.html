@@ -34,27 +34,6 @@ function draw_circle_demo(canvas, ctx) {
   setTimeout(function() { draw_circle_demo(canvas, ctx);}, 1000);
 }
 
-function parse_color(color_str) {
-  return [parseInt(color_str.substr(1, 2), 16),
-    parseInt(color_str.substr(3, 2), 16),
-    parseInt(color_str.substr(5, 2), 16)]
-}
-
-function color_add(lhs, rhs) {
-  if (lhs.length != 7 || rhs.length != 7) {
-    console.log(`Invalid input for color_add ${lhs}, ${rhs}`)
-    return lhs;
-  }
-  var lhs_ar = parse_color(lhs)
-  var rhs_ar = parse_color(rhs)
-  var r = Math.min(255, lhs_ar[0] + rhs_ar[0])
-  var g = Math.min(255, lhs_ar[1] + rhs_ar[1])
-  var b = Math.min(255, lhs_ar[2] + rhs_ar[2])
-  return "#" + r.toString(16).padStart(2, '0')
-      + g.toString(16).padStart(2, '0')
-      + b.toString(16).padStart(2, '0')
-}
-
 // y = yscale * sin(x / xscale)
 function draw_sin(canvas, ctx, shift=0, ang=0) {
   reset_canvas(canvas, ctx);
@@ -76,8 +55,8 @@ function draw_sin(canvas, ctx, shift=0, ang=0) {
 }
 
 // r = a*(1 - sin(theta))
-function draw_heart(canvas, ctx) {
-  ctx.fillStyle = "#ff0000"
+function draw_heart(canvas, ctx, clr=128, inc=4) {
+  ctx.fillStyle = to_rgbstr(clr, 0, 0);
   tot_step = 3600
   step_size = (2 * 3.1415927) / tot_step
   a = 100
@@ -96,6 +75,14 @@ function draw_heart(canvas, ctx) {
     }
   }
   ctx.fill()
+  setTimeout(function() {
+    new_clr = clr + inc
+    if (clr < 128 || clr > 255) {
+      inc = -inc;
+      new_clr = clr + inc;
+    }
+    draw_heart(canvas, ctx, new_clr, inc);
+  }, 20);
 }
 
 var canvas = document.getElementById("myCanvas");
