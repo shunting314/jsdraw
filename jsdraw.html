@@ -75,6 +75,29 @@ function draw_sin(canvas, ctx, shift=0, ang=0) {
   setTimeout(function() { draw_sin(canvas, ctx, shift + 1, ang + 3.14 / 1000); }, 10);
 }
 
+// r = a*(1 - sin(theta))
+function draw_heart(canvas, ctx) {
+  ctx.fillStyle = "#ff0000"
+  tot_step = 3600
+  step_size = (2 * 3.1415927) / tot_step
+  a = 100
+  cx = canvas.width / 2
+  cy = canvas.height / 3
+  ctx.beginPath()
+  for (var step = 0; step < tot_step; ++step) {
+    theta = step_size * step;
+    r = a * (1 - Math.sin(theta))
+    x = r * Math.cos(theta)
+    y = r * Math.sin(theta)
+    if (step == 0) {
+      ctx.moveTo(cx + x, cy - y)
+    } else {
+      ctx.lineTo(cx + x, cy - y)
+    }
+  }
+  ctx.fill()
+}
+
 var canvas = document.getElementById("myCanvas");
 console.log(`canvas width ${canvas.width} height ${canvas.height}`);
 var ctx = canvas.getContext("2d");
@@ -94,6 +117,8 @@ if (cmd == "sin") {
   draw_pythagoras_tree(canvas, ctx, !!animate);
 } else if (cmd == "circle") {
   draw_circle_demo(canvas, ctx);
+} else if (cmd == "heart") {
+  draw_heart(canvas, ctx)
 } else {
   alert(`Invalid command ${cmd}`);
 }
