@@ -12,7 +12,11 @@ function rand_int(start, end) {
 
 function http_get_params() {
   params = {}
-  for (var assignstr of location.href.split('?')[1].split('&')) {
+  parts_by_que = location.href.split('?')
+  if (parts_by_que.length < 2) { // no query string
+    return params
+  }
+  for (var assignstr of parts_by_que[1].split('&')) {
     pair = assignstr.split('=')
     key = decodeURIComponent(pair[0])
     val = decodeURIComponent(pair[1])
