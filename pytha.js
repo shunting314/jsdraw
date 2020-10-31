@@ -8,8 +8,9 @@ class pytha_ctx {
     this.inc = 1.0;
     this.lbound = 3.14 / 6
     this.rbound = 3.14 / 3
-    this.step = 3.14 / 500
+    this.step = 3.14 / 540
     this.interval = 1
+    this.single_step = true;
   }
 
   turn() {
@@ -132,7 +133,7 @@ function draw_tree_instance() {
   draw_patha_tree_rec(g_ctx.cub_bot_ray, 15);
   if (g_ctx.animate) {
     g_ctx.turn()
-    setTimeout(function() { draw_tree_instance(g_ctx.cub_bot_ray); }, g_ctx.interval);
+    setTimeout(function() { draw_tree_instance(); }, g_ctx.interval);
   }
 }
 
@@ -162,7 +163,26 @@ function draw_pythagoras_tree(canvas, ctx, animate) {
   canvas.onclick = canvas_click
 
   // setup download
-  var download_link = document.getElementById("download")
+  /* var */ download_link = document.getElementById("download")
   download_link.style.display = 'block'
-  download_link.onclick = function() { download_canvas(download_link, canvas); }
+  /* // temp code to click 180 times
+ a = document.getElementsByTagName("a")[0];
+ itr = 0
+ function f() {
+   download_link.download = `${itr}.jpg`
+   a.click();
+   itr++;
+   if (itr < 180) {
+     setTimeout(f, 2000);
+   }
+ }
+ f()
+   */
+  download_link.onclick = function() {
+    download_canvas(download_link, canvas);
+    if (g_ctx.single_step) {
+      g_ctx.turn()
+      draw_tree_instance();
+    }
+  }
 }
