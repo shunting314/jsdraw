@@ -36,6 +36,11 @@ function reset_canvas(canvas, ctx) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
+function fill_canvas(canvas, ctx, clr) {
+  ctx.fillStyle = clr
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+}
+
 function rotate_vec(x, y, ang) {
   x2 = Math.cos(ang);
   y2 = Math.sin(ang);

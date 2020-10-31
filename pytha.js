@@ -127,7 +127,8 @@ function draw_patha_tree_rec(cub_bot_ray, ttl, tag="untagged", color="#006000") 
 }
 
 function draw_tree_instance() {
-  reset_canvas(g_ctx.canvas, g_ctx.ctx) 
+  // reset_canvas(g_ctx.canvas, g_ctx.ctx) 
+  fill_canvas(g_ctx.canvas, g_ctx.ctx, "#f8f8f8") 
   draw_patha_tree_rec(g_ctx.cub_bot_ray, 15);
   if (g_ctx.animate) {
     g_ctx.turn()
