@@ -1,5 +1,5 @@
 # Run command:
-# PYTHONPATH=/Users/shunting/Documents/moviepy python3.6 add_sound_to_jif.py
+# PYTHONPATH=/Users/shunting/Documents/moviepy python3.6 add_sound_to_gif.py
 # View command:
 # open -a vlc medias/pytha.avi
 from moviepy.editor import *
